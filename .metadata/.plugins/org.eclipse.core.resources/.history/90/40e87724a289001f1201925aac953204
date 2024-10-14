@@ -1,0 +1,18 @@
+package br.org.serratec.biblioteca.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
+public class ControllerExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErroResposta> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        String mensagemErro = ex.getBindingResult().getFieldError().getDefaultMessage();
+        ErroResposta erroResposta = new ErroResposta(mensagemErro);
+        return new ResponseEntity<>(erroResposta, HttpStatus.BAD_REQUEST);
+    }
+}
